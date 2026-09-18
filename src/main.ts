@@ -1,15 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module.js';
+import { StandardSchemaValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalPipes(new StandardSchemaValidationPipe());
 
   const config = new DocumentBuilder()
     .setTitle('IssueDock')
     .setDescription('The IssueDock API description')
     .setVersion('1.0')
-    .addTag('auth', '認証')
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
