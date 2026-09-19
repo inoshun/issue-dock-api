@@ -15,6 +15,13 @@ export class InvalidRegisterUserInputError extends Error {
   }
 }
 
+export class UserAlreadyExistsError extends Error {
+  constructor() {
+    super('User already exists');
+    this.name = 'UserAlreadyExistsError';
+  }
+}
+
 type RegisterUserCommand = {
   email: string;
   name: string;
@@ -32,6 +39,12 @@ export class RegisterUserUseCase {
       const email = Email.create(command.email);
       const name = Name.create(command.name);
       const password = Password.create(command.password);
+
+      const userExists = await this.userRepository.existsByEmail(email);
+
+      if (userExists) {
+        throw new UserAlreadyExistsError();
+      }
 
       const passwordHash = await this.passwordHasher.hash(password.value);
 

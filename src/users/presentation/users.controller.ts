@@ -1,10 +1,17 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { registerUserSchema } from './dto/register-user.dto.js';
 import type { RegisterUserDto } from './dto/register-user.dto.js';
 import {
   RegisterUserUseCase,
   InvalidRegisterUserInputError,
+  UserAlreadyExistsError,
 } from '../application/use-cases/register-user.use-case.js';
 
 @Controller('users')
@@ -30,6 +37,12 @@ export class UsersController {
         throw new BadRequestException({
           code: 'INVALID_REGISTER_USER_INPUT',
           field: error.field,
+        });
+      }
+
+      if (error instanceof UserAlreadyExistsError) {
+        throw new ConflictException({
+          code: 'USER_ALREADY_EXISTS',
         });
       }
 

@@ -1,3 +1,5 @@
+import type { Email } from '../domain/value-objects/email.js';
+
 export type UserToAdd = {
   email: string;
   name: string;
@@ -6,6 +8,7 @@ export type UserToAdd = {
 
 export interface IUserRepository {
   add(user: UserToAdd): Promise<void>;
+  existsByEmail(email: Email): Promise<boolean>;
 }
 
 export interface IPasswordHasher {
