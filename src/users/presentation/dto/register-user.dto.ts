@@ -6,7 +6,7 @@ const asciiSymbolPattern = /[!-/:-@[-`{-~]/;
 // 半角英数字・半角記号のみ。空白や日本語も不許可
 const allowedPasswordCharactersPattern = /^[\x21-\x7E]+$/;
 
-export const createUserSchema = z.object({
+export const registerUserSchema = z.object({
   email: z.email().meta({
     title: 'メールアドレス',
     example: 'user@example.com',
@@ -34,4 +34,4 @@ export const createUserSchema = z.object({
     }),
 });
 
-export type CreateUserDto = z.infer<typeof createUserSchema>;
+export type RegisterUserDto = z.infer<typeof registerUserSchema>;
