@@ -34,16 +34,11 @@ export class UsersController {
       });
     } catch (error) {
       if (error instanceof InvalidRegisterUserInputError) {
-        throw new BadRequestException({
-          code: 'INVALID_REGISTER_USER_INPUT',
-          field: error.field,
-        });
+        throw new BadRequestException();
       }
 
       if (error instanceof UserAlreadyExistsError) {
-        throw new ConflictException({
-          code: 'USER_ALREADY_EXISTS',
-        });
+        throw new ConflictException();
       }
 
       throw error;

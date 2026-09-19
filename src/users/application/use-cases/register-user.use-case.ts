@@ -6,11 +6,9 @@ import {
 } from '../../domain/value-objects/password.js';
 import type { IPasswordHasher, IUserRepository } from '../interfaces.js';
 
-type InvalidRegisterUserField = 'email' | 'name' | 'password';
-
 export class InvalidRegisterUserInputError extends Error {
-  constructor(readonly field: InvalidRegisterUserField) {
-    super(`Invalid register user input: ${field}`);
+  constructor() {
+    super('Invalid register user input');
     this.name = 'InvalidRegisterUserInputError';
   }
 }
@@ -54,16 +52,12 @@ export class RegisterUserUseCase {
         passwordHash,
       });
     } catch (error) {
-      if (error instanceof InvalidEmailError) {
-        throw new InvalidRegisterUserInputError('email');
-      }
-
-      if (error instanceof InvalidNameError) {
-        throw new InvalidRegisterUserInputError('name');
-      }
-
-      if (error instanceof InvalidPasswordError) {
-        throw new InvalidRegisterUserInputError('password');
+      if (
+        error instanceof InvalidEmailError ||
+        error instanceof InvalidNameError ||
+        error instanceof InvalidPasswordError
+      ) {
+        throw new InvalidRegisterUserInputError();
       }
 
       throw error;
