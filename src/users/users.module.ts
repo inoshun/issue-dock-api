@@ -7,9 +7,7 @@ import type {
   IPasswordHasher,
   IUserRepository,
 } from './application/interfaces.js';
-
-export const USER_REPOSITORY = Symbol('USER_REPOSITORY');
-export const PASSWORD_HASHER = Symbol('PASSWORD_HASHER');
+import { PASSWORD_HASHER, USER_REPOSITORY } from './users.tokens.js';
 
 @Module({
   controllers: [UsersController],
