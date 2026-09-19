@@ -1,9 +1,10 @@
 import type { Email } from '../domain/value-objects/email.js';
+import type { Password } from '../domain/value-objects/password.js';
 
 export type UserToAdd = {
   email: string;
   name: string;
-  passwordHash: string;
+  hashedPassword: string;
 };
 
 export interface IUserRepository {
@@ -12,5 +13,5 @@ export interface IUserRepository {
 }
 
 export interface IPasswordHasher {
-  hash(password: string): Promise<string>;
+  hash(password: Password): Promise<string>;
 }

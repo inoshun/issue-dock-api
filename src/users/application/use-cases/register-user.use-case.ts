@@ -44,12 +44,12 @@ export class RegisterUserUseCase {
         throw new UserAlreadyExistsError();
       }
 
-      const passwordHash = await this.passwordHasher.hash(password.value);
+      const hashedPassword = await this.passwordHasher.hash(password);
 
       return await this.userRepository.add({
         email: email.value,
         name: name.value,
-        passwordHash,
+        hashedPassword,
       });
     } catch (error) {
       if (
