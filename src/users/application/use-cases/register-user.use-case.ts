@@ -4,7 +4,7 @@ import {
   Password,
   InvalidPasswordError,
 } from '../../domain/value-objects/password.js';
-import { IUserRepository } from '../interfaces.js';
+import type { IPasswordHasher, IUserRepository } from '../interfaces.js';
 
 type InvalidRegisterUserField = 'email' | 'name' | 'password';
 
@@ -22,7 +22,10 @@ type RegisterUserCommand = {
 };
 
 export class RegisterUserUseCase {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(
+    private readonly userRepository: IUserRepository,
+    private readonly passwordHasher: IPasswordHasher,
+  ) {}
 
   async execute(command: RegisterUserCommand) {
     try {
@@ -30,10 +33,12 @@ export class RegisterUserUseCase {
       const name = Name.create(command.name);
       const password = Password.create(command.password);
 
-      return await this.userRepository.register({
+      const passwordHash = await this.passwordHasher.hash(password.value);
+
+      return await this.userRepository.add({
         email: email.value,
         name: name.value,
-        password: password.value,
+        passwordHash,
       });
     } catch (error) {
       if (error instanceof InvalidEmailError) {

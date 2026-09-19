@@ -1,7 +1,13 @@
+export type UserToAdd = {
+  email: string;
+  name: string;
+  passwordHash: string;
+};
+
 export interface IUserRepository {
-  register(user: {
-    email: string;
-    name: string;
-    password: string;
-  }): Promise<void>;
+  add(user: UserToAdd): Promise<void>;
+}
+
+export interface IPasswordHasher {
+  hash(password: string): Promise<string>;
 }
